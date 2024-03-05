@@ -57,7 +57,8 @@ type Persona struct {
 func (p Persona) Validate() bool 
 ```
 
-**3. Crear un slice para almacenar las personas:**
+
+### 3. Crear un slice para almacenar las personas
 
 - En el archivo `main.go` crea un slice de tipo `Persona` para almacenar las personas:
 
@@ -84,7 +85,7 @@ func editarPersonaEnLaDb(persona Persona) err
 
 Aquí irá la magía, deberiamos crear una struct para contemplar este nueva “Persona Extendida Con Su País” en donde deberá contar con la información ya mencionada.
 
-1. **Crear handlers en un archivo `handlers.go`**
+### 6. Crear handlers en un archivo `handlers.go`
 
 <aside>
 💡 No vamos a necesitar una librería externa, en go1.22 [tenemos sorpresas!](https://tip.golang.org/doc/go1.22#enhanced_routing_patterns)
