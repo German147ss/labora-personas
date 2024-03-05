@@ -15,7 +15,7 @@ Para realizar esto consultaremos a [restcountries](https://restcountries.com/).
 
 </aside>
 
-![Proyecto.jpg](LABORA%20API%20Personas%20b0fbb776db4049669a396b2bd17c58cc/Proyecto.jpg)
+![Proyecto.jpg](img/Proyecto.jpg)
 
 # Hitos
 
@@ -27,7 +27,7 @@ Podemos llevar a cabo nuestra aplicación en los siguientes hitos:
 
 Esto de forma muy sencilla es DDD:
 
-![Untitled-Project.jpg](LABORA%20API%20Personas%20b0fbb776db4049669a396b2bd17c58cc/Untitled-Project.jpg)
+![Untitled-Project.jpg](img/Untitled-Project.jpg)
 
 **Pasos:**
 
