@@ -1,6 +1,12 @@
 // CAPA DE SERVICIO
 package main
 
+import (
+	"fmt"
+	"encoding/json"
+	"net/http"
+)
+
 type PersonaAumentada struct {
 	Persona
 	CountryInfo
@@ -38,11 +44,37 @@ func editarPersona(id int, nombre string, apellido string, edad int, countryCode
 //OBTENER PERSONA -> obtenerPersonaPorId -> Encuentra la persona y una vez encontrada, va a buscar la información relacionada a su country.
 
 // Obtener persona
-func obtenerPersonaPorId(id int) Persona {
+func obtenerPersonaPorId(id int) PersonaAndCountry {
 	for i := 0; i < len(PersonasDB); i++ {
-		if PersonasDB[i].ID == id {
-			return PersonasDB[i]
+		p := PersonasDB[i]
+		if p.ID == id {
+			countryInfo, _ := getCountryInfo2(p.CountryCode)
+			return PersonaAndCountry{p, countryInfo}
 		}
 	}
-	return Persona{}
+	return PersonaAndCountry{}
+}
+
+func getCountryInfo2(countryCode string) (cInfo CountryInfo2, e error){
+	url := fmt.Sprintf("https://restcountries.com/v3.1/alpha/%s", countryCode)
+	resp, err := http.Get(url)
+	if err != nil {
+		fmt.Println("err:", err)
+	}
+	fmt.Println("respuesta:", resp.Body)
+
+	decoder := json.NewDecoder(resp.Body)
+
+	var countries Countries
+	err = decoder.Decode(&countries)
+	if err != nil {
+		fmt.Println(err)
+	}
+	country := countries[0]
+	return CountryInfo2{
+			Name:country.Name,
+			Currencies:country.Currencies,
+			Timezone:country.Timezones[0],
+		}, 
+		nil
 }
