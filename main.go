@@ -1,22 +1,26 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 )
 
+
 func main() {
+	p := Persona{
+		1,
+		"Juan",
+		"Arbelaez",
+		20,
+		"col",
+	}
+	insertarPersonaEnLaDb(p)
 
 	router := http.NewServeMux()
 
-	// Crear
-	router.HandleFunc("POST /personas", crearPersona)
-
-	// Editar
-	router.HandleFunc("PUT /personas", actualizarPersona)
-
 	// Obtener
-	router.HandleFunc("GET /personas/{id}", obtenerPersona)
+	router.HandleFunc("/personas", obtenerPersona)
 
 	// Iniciar el servidor HTTP en el puerto 8080
-	http.ListenAndServe(":8080", router)
+	fmt.Println(http.ListenAndServe(":8086", router))
 }

@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strconv"
 )
 
 func crearPersona(w http.ResponseWriter, r *http.Request) {
@@ -35,13 +36,13 @@ func crearPersona(w http.ResponseWriter, r *http.Request) {
 }
 
 func obtenerPersona(w http.ResponseWriter, r *http.Request) {
-	/* //obtener id
 	id := r.URL.Query().Get("id")
 	//convertir id a int
 	idAsInt, _ := strconv.Atoi(id)
 	//buscar persona por id
 	persona := obtenerPersonaPorId(idAsInt)
-	*/
+	encoder := json.NewEncoder(w)
+	encoder.Encode(persona)
 
 }
 

@@ -10,9 +10,21 @@ type Countries []Country
 
 type Country struct {
 	Name       Name       `json:"name"`
-	Currencies Currencies `json:"currencies"`
+	Currencies map[string]struct {
+		Name   string `json:"name"`
+		Symbol string `json:"symbol"`
+	} `json:"currencies"`
 	Timezones  []string   `json:"timezones"`
 	Flags      Flags      `json:"flags"`
+}
+
+type CountryInfo2 struct {
+	Name Name `json:"name"`
+	Currencies map[string]struct {
+		Name   string `json:"name"`
+		Symbol string `json:"symbol"`
+	} `json:"currencies"`
+	Timezone string `json:"timezone"`
 }
 
 type Currencies struct {
@@ -31,7 +43,7 @@ type Name struct {
 	Common string `json:"common"`
 }
 
-func main() {
+func nomain() {
 	url := "https://restcountries.com/v3.1/alpha/arg"
 	resp, err := http.Get(url)
 	if err != nil {

@@ -9,6 +9,11 @@ type Persona struct {
 	CountryCode string `json:"countryCode"`
 }
 
+type PersonaAndCountry struct {
+	Persona Persona `json:"persona"`
+	CountryInfo CountryInfo2 `json:"countryInfo`
+}
+
 var PersonasDB = []Persona{} //persona 1: id:1 , someData{}
 
 //Validación
