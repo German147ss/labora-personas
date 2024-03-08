@@ -1,20 +1,50 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 )
 
+type Countries []Country
+
+type Country struct {
+	Name       Name       `json:"name"`
+	Currencies Currencies `json:"currencies"`
+	Timezones  []string   `json:"timezones"`
+	Flags      Flags      `json:"flags"`
+}
+
+type Currencies struct {
+	Ars Ars `json:"ARS"`
+}
+
+type Ars struct {
+	Name string `json:"name"`
+}
+
+type Flags struct {
+	PNG string `json:"png"`
+}
+
+type Name struct {
+	Common string `json:"common"`
+}
+
 func main() {
-	mux := http.NewServeMux()
-	mux.HandleFunc("GET /path/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprint(w, "got path\n")
-	})
+	url := "https://restcountries.com/v3.1/alpha/arg"
+	resp, err := http.Get(url)
+	if err != nil {
+		fmt.Println("err:", err)
+	}
+	fmt.Println("respuesta:", resp.Body)
 
-	mux.HandleFunc("POST /task/{id}/details", func(w http.ResponseWriter, r *http.Request) {
-		id := r.PathValue("id")
-		fmt.Fprintf(w, "handling task with id=%v\n", id)
-	})
+	decoder := json.NewDecoder(resp.Body)
 
-	http.ListenAndServe(":8080", mux)
+	var countries Countries
+	err = decoder.Decode(&countries)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Printf("%+v \n", countries[0].Flags.PNG)
 }

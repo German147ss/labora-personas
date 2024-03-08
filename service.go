@@ -35,6 +35,8 @@ func editarPersona(id int, nombre string, apellido string, edad int, countryCode
 	}
 }
 
+//OBTENER PERSONA -> obtenerPersonaPorId -> Encuentra la persona y una vez encontrada, va a buscar la información relacionada a su country.
+
 // Obtener persona
 func obtenerPersonaPorId(id int) Persona {
 	for i := 0; i < len(PersonasDB); i++ {

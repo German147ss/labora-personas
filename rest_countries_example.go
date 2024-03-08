@@ -2,7 +2,6 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 )
@@ -16,7 +15,7 @@ type CountryResponse []struct {
 	} `json:"currencies"`
 }
 
-type Name struct {
+type NameO struct {
 	Common string `json:"common"`
 }
 
@@ -33,26 +32,26 @@ func getCountryInfo(countryCode string) (CountryInfo, error) {
 		return CountryInfo{}, err
 	}
 	defer resp.Body.Close()
+	/*
+		if resp.StatusCode != http.StatusOK {
+			return CountryInfo{}, fmt.Errorf("error en la solicitud: %s", resp.Status)
+		}
 
-	if resp.StatusCode != http.StatusOK {
-		return CountryInfo{}, fmt.Errorf("error en la solicitud: %s", resp.Status)
-	}
+		var countryResponse CountryResponse
+		err = json.NewDecoder(resp.Body).Decode(&countryResponse)
+		if err != nil {
+			return CountryInfo{}, err
+		}
 
-	var countryResponse CountryResponse
-	err = json.NewDecoder(resp.Body).Decode(&countryResponse)
-	if err != nil {
-		return CountryInfo{}, err
-	}
-
-	// Tomar solo el primer país (suponiendo que solo haya uno en la respuesta)
-	country := countryResponse[0]
-
-	// Extraer la información necesaria
+		// Tomar solo el primer país (suponiendo que solo haya uno en la respuesta)
+		country := countryResponse[0]
+	*/
+	/* // Extraer la información necesaria
 	countryInfo := CountryInfo{
 		Name:     country.Name.Common,
 		Timezone: country.Timezones[0],           // Tomar solo el primer timezone
 		Currency: country.Currencies["COP"].Name, // Tomar la moneda COP
-	}
+	} */
 
-	return countryInfo, nil
+	return CountryInfo{}, nil
 }
