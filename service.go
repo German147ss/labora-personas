@@ -1,6 +1,12 @@
 // CAPA DE SERVICIO
 package main
 
+import (
+	"encoding/json"
+	"fmt"
+	"net/http"
+)
+
 type PersonaAumentada struct {
 	Persona
 	CountryInfo
@@ -38,11 +44,64 @@ func editarPersona(id int, nombre string, apellido string, edad int, countryCode
 //OBTENER PERSONA -> obtenerPersonaPorId -> Encuentra la persona y una vez encontrada, va a buscar la información relacionada a su country.
 
 // Obtener persona
-func obtenerPersonaPorId(id int) Persona {
+func obtenerPersonaPorId(id int) PersonaAumentada {
 	for i := 0; i < len(PersonasDB); i++ {
 		if PersonasDB[i].ID == id {
-			return PersonasDB[i]
+			aux := PersonasDB[i]
+			countryInfo, err := getCountryInfo(aux.CountryCode)
+			if err != nil {
+				fmt.Println("Error al obtener información del país")
+			}
+			return PersonaAumentada{
+				Persona:     aux,
+				CountryInfo: countryInfo,
+			}
 		}
 	}
-	return Persona{}
+	return PersonaAumentada{}
+}
+
+func getCountryInfo(countryCode string) (CountryInfo, error) {
+	url := fmt.Sprintf("https://restcountries.com/v3.1/alpha/%s", countryCode)
+	resp, err := http.Get(url)
+	if err != nil {
+		return CountryInfo{}, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return CountryInfo{}, fmt.Errorf("error en la solicitud: %s", resp.Status)
+	}
+
+	var countryResponse CountryResponse
+	err = json.NewDecoder(resp.Body).Decode(&countryResponse)
+	if err != nil {
+		return CountryInfo{}, err
+	}
+
+	// Tomar solo el primer país (suponiendo que solo haya uno en la respuesta)
+	country := countryResponse[0]
+
+	//obtener key del mapa
+
+	// Extraer la información necesaria
+
+	countryInfo := CountryInfo{
+		Name:     country.Name.Common,
+		Timezone: country.Timezones[0], // Tomar solo el primer timezone
+	}
+
+	for key, _ := range country.Currencies {
+		countryInfo.Currency = key
+	}
+
+	return countryInfo, nil
+}
+
+func eliminarPersonaPorId(id int) {
+	for i := 0; i < len(PersonasDB); i++ {
+		if PersonasDB[i].ID == id {
+			PersonasDB = append(PersonasDB[:i], PersonasDB[i+1:]...)
+		}
+	}
 }

@@ -19,3 +19,18 @@ func (p *Persona) Validate() bool {
 	}
 	return true
 }
+
+type CountryResponse []struct {
+	Name       Name     `json:"name"`
+	Timezones  []string `json:"timezones"`
+	Currencies map[string]struct {
+		Name   string `json:"name"`
+		Symbol string `json:"symbol"`
+	} `json:"currencies"`
+}
+
+type CountryInfo struct {
+	Name     string
+	Timezone string
+	Currency string
+}
