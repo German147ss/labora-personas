@@ -1,10 +1,12 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 )
 
 func main() {
+	initDB()
 
 	router := http.NewServeMux()
 
@@ -17,6 +19,9 @@ func main() {
 	// Obtener
 	router.HandleFunc("GET /personas/{id}", obtenerPersona)
 
+	//Eliminar
+	router.HandleFunc("DELETE /personas/{id}", eliminarPersona)
+
 	// Iniciar el servidor HTTP en el puerto 8080
-	http.ListenAndServe(":8080", router)
+	fmt.Println(http.ListenAndServe(":8080", router))
 }

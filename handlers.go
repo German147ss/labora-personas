@@ -37,9 +37,10 @@ func crearPersona(w http.ResponseWriter, r *http.Request) {
 
 func obtenerPersona(w http.ResponseWriter, r *http.Request) {
 	//obtener id
-	id := r.URL.Query().Get("id")
+	idString := r.PathValue("id")
+
 	//convertir id a int
-	idAsInt, _ := strconv.Atoi(id)
+	idAsInt, _ := strconv.Atoi(idString)
 	//buscar persona por id
 	persona := obtenerPersonaPorId(idAsInt)
 	//enviar respuesta
@@ -62,8 +63,8 @@ func actualizarPersona(w http.ResponseWriter, r *http.Request) {
 }
 
 func eliminarPersona(w http.ResponseWriter, r *http.Request) {
-	id := r.URL.Query().Get("id")
-	idAsInt, _ := strconv.Atoi(id)
+	idString := r.PathValue("id")
+	idAsInt, _ := strconv.Atoi(idString)
 	eliminarPersonaPorId(idAsInt)
 	w.WriteHeader(http.StatusOK)
 }

@@ -2,10 +2,15 @@
 package main
 
 import (
+	"database/sql"
 	"encoding/json"
 	"fmt"
 	"net/http"
+
+	_ "github.com/lib/pq"
 )
+
+var DB *sql.DB
 
 type PersonaAumentada struct {
 	Persona
@@ -92,16 +97,25 @@ func getCountryInfo(countryCode string) (CountryInfo, error) {
 	}
 
 	for key, _ := range country.Currencies {
-		countryInfo.Currency = key
+		countryInfo.Currency = key //obtenemos el simbolo de la moneda
 	}
 
 	return countryInfo, nil
 }
 
 func eliminarPersonaPorId(id int) {
-	for i := 0; i < len(PersonasDB); i++ {
-		if PersonasDB[i].ID == id {
-			PersonasDB = append(PersonasDB[:i], PersonasDB[i+1:]...)
-		}
+	_, err := DB.Exec("DELETE FROM personas WHERE id = $1", id)
+	if err != nil {
+		fmt.Println("Error al eliminar la persona")
+	}
+	fmt.Println("Persona eliminada")
+}
+
+func initDB() {
+	var err error
+	DB, err = sql.Open("postgres", "user=alfred dbname=labora host=localhost sslmode=disable password=4lfr3d port=5431")
+	if err != nil {
+		fmt.Println("Error en la conexión a la base de datos")
+		panic(err)
 	}
 }

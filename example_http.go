@@ -1,5 +1,6 @@
 package main
 
+/*
 import (
 	"encoding/json"
 	"fmt"
@@ -48,3 +49,4 @@ func main() {
 	}
 	fmt.Printf("%+v \n", countries[0].Flags.PNG)
 }
+*/
