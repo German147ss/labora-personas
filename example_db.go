@@ -2,42 +2,27 @@ package main
 
 import (
 	"database/sql"
-	"fmt"
 
 	_ "github.com/lib/pq"
 )
 
-type Persona struct {
-	ID          int    `json:"id"`
-	Nombre      string `json:"nombre"`
-	Apellido    string `json:"apellido"`
-	Edad        int    `json:"edad"`
-	CountryCode string `json:"countryCode"`
+// Función para conectar a la base de datos
+func conectarDB() (*sql.DB, error) {
+	db, err := sql.Open("postgres", "user=alfred dbname=labora host=localhost sslmode=disable password=4lfr3d port=5432")
+
+	if err != nil {
+		return nil, err
+	}
+	return db, nil
 }
 
-func main() {
-	// Configurar la conexión a PostgreSQL
-	db, err := sql.Open("postgres", "user=alfred dbname=labora host=localhost sslmode=disable password=4lfr3d port=5431")
-	if err != nil {
-		fmt.Println("Error en la conexión a la base de datos")
-		panic(err)
-	}
-	defer db.Close()
-	fmt.Println("Conexión exitosa")
-
-	var solicitudDeId = 2
-	resultRow := db.QueryRow("SELECT * FROM personas where id = $1", solicitudDeId)
-	if err != nil {
-		fmt.Println("Error en la consulta")
-		panic(err)
-	}
+// Función para obtener una persona por su ID
+func obtenerPersonaPorID(db *sql.DB, id int) (Persona, error) {
 	var persona Persona
-	err = resultRow.Scan(&persona.ID, &persona.Nombre, &persona.Apellido, &persona.Edad, &persona.CountryCode)
+	row := db.QueryRow("SELECT * FROM personas WHERE id = $1", id)
+	err := row.Scan(&persona.ID, &persona.Nombre, &persona.Apellido, &persona.Edad, &persona.CountryCode)
 	if err != nil {
-		fmt.Println("Error en el escaneo")
-		panic(err)
+		return Persona{}, err
 	}
-	fmt.Println(persona)
-
-	defer db.Close()
+	return persona, nil
 }

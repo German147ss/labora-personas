@@ -26,7 +26,6 @@ func insertarPersonaEnLaDb(persona Persona) int {
 
 // Editar persona
 func editarPersona(id int, nombre string, apellido string, edad int, countryCode string) {
-
 	//Encontrar persona segun su id
 	for i := 0; i < len(PersonasDB); i++ {
 		if PersonasDB[i].ID == id {
