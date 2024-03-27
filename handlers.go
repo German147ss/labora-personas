@@ -26,7 +26,12 @@ func crearPersona(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	newPersonId := insertarPersonaEnLaDb(persona)
+	newPersonId, err := insertarPersonaEnLaDb(persona)
+	if err != nil {
+		fmt.Fprintf(w, "ERROR: "+err.Error())
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 	fmt.Println("PersonasDb", PersonasDB)
 	persona.ID = newPersonId
 	// Enviar una respuesta JSON con la persona creada
@@ -34,18 +39,22 @@ func crearPersona(w http.ResponseWriter, r *http.Request) {
 	encoder.Encode(persona)
 
 }
-
 func obtenerPersona(w http.ResponseWriter, r *http.Request) {
-	//obtener id
 	idString := r.PathValue("id")
-
-	//convertir id a int
 	idAsInt, _ := strconv.Atoi(idString)
-	//buscar persona por id
-	persona := obtenerPersonaPorId(idAsInt)
-	//enviar respuesta
+
+	persona, err := obtenerPersonaPorId(idAsInt)
+	if err != nil {
+		http.Error(w, "ERROR: "+err.Error(), http.StatusNotFound)
+		return
+	}
+
 	encoder := json.NewEncoder(w)
-	encoder.Encode(persona)
+	err = encoder.Encode(persona)
+	if err != nil {
+		http.Error(w, "ERROR: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
 }
 
 func actualizarPersona(w http.ResponseWriter, r *http.Request) {
@@ -57,9 +66,14 @@ func actualizarPersona(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	editarPersona(persona.ID, persona.Nombre, persona.Apellido, persona.Edad, persona.CountryCode)
+	personaPtr, err := editarPersona(persona.ID, persona.Nombre, persona.Apellido, persona.Edad, persona.CountryCode)
+	if err != nil {
+		fmt.Fprintf(w, "ERROR: "+err.Error())
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 	encoder := json.NewEncoder(w)
-	encoder.Encode(persona)
+	encoder.Encode(*personaPtr)
 }
 
 func eliminarPersona(w http.ResponseWriter, r *http.Request) {

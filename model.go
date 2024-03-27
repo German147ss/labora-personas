@@ -11,8 +11,7 @@ type Persona struct {
 
 var PersonasDB = []Persona{} //persona 1: id:1 , someData{}
 
-//Validación
-
+// Validación
 func (p *Persona) Validate() bool {
 	if p.Nombre == "" || p.Apellido == "" || p.Edad == 0 || p.CountryCode == "" {
 		return false
@@ -27,6 +26,11 @@ type CountryResponse []struct {
 		Name   string `json:"name"`
 		Symbol string `json:"symbol"`
 	} `json:"currencies"`
+	Flags Flags `json:"flags"`
+}
+
+type Flags struct {
+	PNG string `json:"png"`
 }
 
 type Name struct {
@@ -37,4 +41,5 @@ type CountryInfo struct {
 	Name     string
 	Timezone string
 	Currency string
+	Flag     string
 }

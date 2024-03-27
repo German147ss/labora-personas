@@ -19,6 +19,9 @@ func main() {
 	// Obtener
 	router.HandleFunc("GET /personas/{id}", obtenerPersona)
 
+	// Obtener todos
+	//router.HandleFunc("GET /personas/", obtenerPersona)
+
 	//Eliminar
 	router.HandleFunc("DELETE /personas/{id}", eliminarPersona)
 
