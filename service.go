@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 
 	_ "github.com/lib/pq"
 )
@@ -138,7 +139,16 @@ func eliminarPersonaPorId(id int) {
 
 func initDB() {
 	var err error
-	DB, err = sql.Open("postgres", "user=alfred dbname=labora host=localhost sslmode=disable password=4lfr3d port=5431")
+	// Leer variables de entorno
+	dbUser := os.Getenv("DB_USER")
+	dbPassword := os.Getenv("DB_PASSWORD")
+	dbName := os.Getenv("DB_NAME")
+	dbHost := os.Getenv("DB_HOST")
+	dbPort := os.Getenv("DB_PORT")
+
+	// Usar las variables de entorno en la cadena de conexión
+	connectionString := fmt.Sprintf("user=%s dbname=%s host=%s sslmode=disable password=%s port=%s", dbUser, dbName, dbHost, dbPassword, dbPort)
+	DB, err = sql.Open("postgres", connectionString)
 	if err != nil {
 		fmt.Println("Error en la conexión a la base de datos")
 		panic(err)

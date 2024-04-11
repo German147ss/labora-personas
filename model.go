@@ -9,7 +9,7 @@ type Persona struct {
 	CountryCode string `json:"countryCode"`
 }
 
-var PersonasDB = []Persona{} //persona 1: id:1 , someData{}
+var PersonasDB = []Persona{}
 
 // Validación
 func (p *Persona) Validate() bool {
