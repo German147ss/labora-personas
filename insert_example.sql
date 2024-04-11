@@ -7,5 +7,5 @@ INSERT INTO personas (nombre, apellido, edad, country_code) VALUES ('Maria2', 'G
 
 --3
 INSERT INTO personas (nombre, apellido, edad) VALUES ('Pedro2', 'Gonzalez', 40);
--- Rollback
-ROLLBACK;
+-- Rollback or Commit
+ROLLBACK; -- COMMIT;
