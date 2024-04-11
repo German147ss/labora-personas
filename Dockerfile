@@ -1,5 +1,5 @@
 # Establecer la imagen base para la etapa de construcción
-FROM golang:1.18 as builder
+FROM golang:1.22 as builder
 
 # Establecer el directorio de trabajo en el contenedor
 WORKDIR /app
