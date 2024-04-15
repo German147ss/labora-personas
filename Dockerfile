@@ -1,19 +1,23 @@
-# Etapa de construcción: Usa la imagen base de Go 
-FROM golang:1.22 AS builder
+# Establecer la imagen base para la etapa de construcción
+FROM golang:1.22 as builder
 
-# Configure the Go proxy (if needed)
-ENV GOPROXY=direct
-
-# Establece el directorio de trabajo dentro del contenedor
+# Establecer el directorio de trabajo en el contenedor
 WORKDIR /app
 
-# Copia el código fuente al contenedor
+# Copiar el módulo Go y los archivos de suma
+COPY go.mod ./
+COPY go.sum ./
+
+# Descargar las dependencias del módulo Go
+RUN go mod download
+
+# Copiar el código fuente del proyecto en el contenedor
 COPY . .
 
-# Compila la aplicación
-RUN go build -o main .
+# Compilar la aplicación para un ejecutable
+RUN CGO_ENABLED=0 GOOS=linux go build -o main .
 
-# Etapa de ejecución: Usar una imagen alpine para la etapa de ejecución por su tamaño reducido
+# Usar una imagen alpine para la etapa de ejecución por su tamaño reducido
 FROM alpine:latest
 
 RUN apk --no-cache add ca-certificates
